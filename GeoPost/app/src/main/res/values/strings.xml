@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">GeoPost</string>
+    <string name="title_geopost">GeoPost</string>
+    <string name="login">LOGIN</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="title_activity_amici">Amici</string>
+    <string name="tab_text_1">Mappa</string>
+    <string name="tab_text_2">Elenco</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>
