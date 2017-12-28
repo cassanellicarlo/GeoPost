@@ -97,8 +97,8 @@ public class ElencoAmici extends Fragment implements LocationListener, GoogleApi
             Log.d("Main Activity", "Not Granted yet.");
 
             // Richiesta dei permessi
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+            // Devo usare requestPermissions ( e non ActivityCompat.requestPermissions ) perché sono dentro il fragment
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION);
         }
 
@@ -186,7 +186,7 @@ public class ElencoAmici extends Fragment implements LocationListener, GoogleApi
 
         // Setto i parametri per l'acquisizione della posizione
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(2*1000);
+        mLocationRequest.setInterval(10*1000); // ogni 10 secondi
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
