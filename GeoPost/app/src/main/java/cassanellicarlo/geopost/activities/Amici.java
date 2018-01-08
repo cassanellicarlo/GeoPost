@@ -95,17 +95,6 @@ public class Amici extends AppCompatActivity {
         scaricaAmici();
     }
 
-
-    // Devo riscaricare gli amici qui nella onResume
-    // perché se aggiunge un amico e poi torna agli amici non vede
-    // il nuovo amico
-    @Override
-    protected void onResume() {
-
-
-        super.onResume();
-    }
-
     public void scaricaAmici (){
 
         DatiUtente.getInstance().resetAmici(); // clear delll'arraylist

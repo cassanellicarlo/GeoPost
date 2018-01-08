@@ -69,17 +69,16 @@ public class NuovoStato extends AppCompatActivity implements OnMapReadyCallback,
             // Controllo che il gps sia attivo, altrimenti mostro un Toast
             final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
             if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                Button mybutton=(Button)findViewById(R.id.aggiornaStato) ;
-                mybutton.setEnabled(false);
                 CharSequence text = "Attiva il GPS";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(this, text, duration);
                 toast.show();
             }
-            else{
-                startGoogleApiClient();
-            }
+
+
+            startGoogleApiClient();
+
 
 
 
@@ -216,82 +215,104 @@ public class NuovoStato extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     public void aggiornaStato(View view) {
+        Log.d("AGGIORNASTATO","Cliccato bottone aggiorna stato");
         TextView myMessage=(TextView)findViewById(R.id.nuovoMessaggio);
         String msg=myMessage.getText().toString();
         Log.d("MESSAGGIO",msg);
 
-        String encodedUrl=null;
-
-        try {
-            encodedUrl = URLEncoder.encode(msg, "UTF-8");
-        } catch (UnsupportedEncodingException ignored) {
-            // Can be safely ignored because UTF-8 is always supported
+        // controllo: se il messaggio è vuoto, mostro un toast.
+        if(msg.equals("")){
+            displayMessage("Inserisci un messaggio");
         }
 
-        String session_id=DatiUtente.getInstance().getSession_id();
-        Log.d("SESSIONID:",session_id);
-        double lat=DatiUtente.getInstance().getPosizioneAttuale().getLatitude();
-        Log.d("LATITUDINE",lat+"");
-        double lon=DatiUtente.getInstance().getPosizioneAttuale().getLongitude();
-        Log.d("LONGITUDINE",lon+"");
+        // l'utente ha inserito il messaggio
+        else{
+            String encodedUrl=null;
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = "https://ewserver.di.unimi.it/mobicomp/geopost/status_update?session_id="
-                +session_id+"&lat="+lat+"&lon="+lon+"&message="+encodedUrl;
-        Log.d("URL STATUSUPDATE",url);
+            try {
+                encodedUrl = URLEncoder.encode(msg, "UTF-8");
+            } catch (UnsupportedEncodingException ignored) {
+                // Can be safely ignored because UTF-8 is always supported
+            }
 
+            // Se non ho la posizione dell'utente, mostro un toast
+            if(DatiUtente.getInstance().getPosizioneAttuale() == null){
+                displayMessage("Non posso calcolare la posizione");
+            }
 
+            // Prendo session id e posizione dell'utente
+            else {
+                String session_id=DatiUtente.getInstance().getSession_id();
+                Log.d("SESSIONID:",session_id);
+                double lat=DatiUtente.getInstance().getPosizioneAttuale().getLatitude();
+                Log.d("LATITUDINE",lat+"");
+                double lon=DatiUtente.getInstance().getPosizioneAttuale().getLongitude();
+                Log.d("LONGITUDINE",lon+"");
 
-        // prepare the Request
-        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        // display response
-                        Log.d("Response", response);
-                        // OUTPUT VUOTO
-
-                        Context context = getApplicationContext();
-                        CharSequence text = "Stato aggiornato!";
-                        int duration = Toast.LENGTH_SHORT;
-
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-
-                        finish(); // finish the activity e torna agli amici
+                RequestQueue queue = Volley.newRequestQueue(this);
+                final String url = "https://ewserver.di.unimi.it/mobicomp/geopost/status_update?session_id="
+                        +session_id+"&lat="+lat+"&lon="+lon+"&message="+encodedUrl;
+                Log.d("URL STATUSUPDATE",url);
 
 
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
 
-                        if( error instanceof NetworkError) {
-                            displayMessage("Errore di rete!");
-                        }
+                // prepare the Request
+                StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>()
+                        {
+                            @Override
+                            public void onResponse(String response) {
+                                // display response
+                                Log.d("Response", response);
+                                // OUTPUT VUOTO
 
-                        NetworkResponse networkResponse=error.networkResponse;
-                        if(networkResponse != null && networkResponse.data != null){
-                            switch(networkResponse.statusCode){
-                                case 400:
-                                    displayMessage("Errore");
-                                    break;
+                                Context context = getApplicationContext();
+                                CharSequence text = "Stato aggiornato!";
+                                int duration = Toast.LENGTH_SHORT;
 
-                                case 401:
-                                    displayMessage("Numero di sessione non valido");
-                                    break;
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+
+                                finish(); // finish the activity e torna agli amici
+
+
                             }
-                            //Additional cases
-                        }
-                    }
-                }
-        );
+                        },
+                        new Response.ErrorListener()
+                        {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
 
-        // add it to the RequestQueue
-        queue.add(getRequest);
+                                if( error instanceof NetworkError) {
+                                    displayMessage("Errore di rete!");
+                                }
+
+                                NetworkResponse networkResponse=error.networkResponse;
+                                if(networkResponse != null && networkResponse.data != null){
+                                    switch(networkResponse.statusCode){
+                                        case 400:
+                                            displayMessage("Errore");
+                                            break;
+
+                                        case 401:
+                                            displayMessage("Numero di sessione non valido");
+                                            break;
+                                    }
+                                    //Additional cases
+                                }
+                            }
+                        }
+                );
+
+                // add it to the RequestQueue
+                queue.add(getRequest);
+
+
+            }
+            }
+
+
+
 
     }
 

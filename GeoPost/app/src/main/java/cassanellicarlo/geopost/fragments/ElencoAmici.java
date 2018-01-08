@@ -85,10 +85,10 @@ public class ElencoAmici extends Fragment implements LocationListener, GoogleApi
                 toast.show();
             }
 
-            else {
-                if(mGoogleApiClient!=null) mGoogleApiClient.connect(); // Se il Google  Client è già istanziato, mi connetto
-                else startGoogleApiClient(); // Instanzio il google api client
-            }
+            if(mGoogleApiClient!=null) mGoogleApiClient.connect(); // Se il Google  Client è già istanziato, mi connetto
+
+            else startGoogleApiClient(); // Instanzio il google api client
+
 
 
 

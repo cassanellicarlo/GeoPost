@@ -201,12 +201,22 @@ public class NuovoAmico extends AppCompatActivity {
                         }
 
                         NetworkResponse response = error.networkResponse;
+                        String errore="";
                         if(response != null && response.data != null){
                             switch(response.statusCode){
                                 case 400:
                                     json = new String(response.data);
                                     Log.d("JSON ERROR:",json);
-                                    if(json != null) displayMessage(json);
+                                    if(json != null){
+                                        if(json.equals("CANNOT FOLLOW YOURSELF"))
+                                            errore="Non puoi seguire te stesso";
+                                        else if(json.equals("ALREADY FOLLOWING USER"))
+                                            errore="Utente già seguito";
+                                        else if(json.equals("USERNAME NOT FOUND"))
+                                            errore="Utente non trovato";
+
+                                        displayMessage(errore);
+                                    }
                                     break;
                             }
                             //Additional cases
