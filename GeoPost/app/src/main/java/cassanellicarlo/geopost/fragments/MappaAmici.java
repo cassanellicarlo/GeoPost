@@ -122,7 +122,7 @@ public class MappaAmici extends Fragment  implements OnMapReadyCallback {
                 LatLngBounds myBounds=myArea();
 
                 // Centro la mappa sull'area che ho calcolato
-                mappa.moveCamera(CameraUpdateFactory.newLatLngZoom(myBounds.getCenter(),0));
+                mappa.moveCamera(CameraUpdateFactory.newLatLngZoom(myBounds.getCenter(),10));
             }
 
 

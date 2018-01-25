@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -59,6 +60,9 @@ public class Profilo extends AppCompatActivity implements OnMapReadyCallback {
 
         usernameTextView=(TextView)findViewById(R.id.nomeUtente);
         msgTextView=(TextView)findViewById(R.id.messaggioUtente);
+        msgTextView.setMovementMethod(new ScrollingMovementMethod());
+
+
     }
 
     @Override

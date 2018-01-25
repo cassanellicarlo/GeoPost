@@ -29,6 +29,8 @@
         android:layout_marginTop="16dp"
         android:textSize="18sp"
         android:textStyle="italic"
+        android:maxLines="2"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
